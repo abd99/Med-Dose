@@ -1,11 +1,378 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        &lt;!&ndash; Customize your theme here. &ndash;&gt;
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>-->
+
+    <style name="AlertDialog.TitleText" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:fontFamily">@font/google_sans_medium</item>
+        <item name="android:textSize">20sp</item>
+        <item name="fontFamily">@font/google_sans_medium</item>
+    </style>
+
+    <style name="AlertDialog.TitlePanel" parent="MaterialAlertDialog.MaterialComponents.Title.Panel">
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:paddingTop">?attr/dialogPreferredPadding</item>
+    </style>
+
+    <style name="AlertDialog.BodyText" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:lineSpacingExtra">4sp</item>
+    </style>
+
+    <style name="AlertDialog.ButtonBar" parent ="@style/Widget.AppCompat.ButtonBar.AlertDialog">
+        <item name="android:paddingBottom">@dimen/margin_small</item>
+        <item name="android:paddingTop">@dimen/margin_small</item>
+    </style>
+
+    <!-- Text appearances -->
+
+    <!-- For titles, e.g. Event Detail, Speaker Detail -->
+    <style name="TextAppearance.MedDose.H1" parent="@style/TextAppearance.MaterialComponents.Headline5">
+        <item name="android:fontFamily">@font/google_sans</item>
+        <item name="android:textSize">@dimen/text_size_h1</item>
+        <item name="fontFamily">@font/google_sans</item>
+    </style>
+
+    <!-- For smaller titles, e.g. Schedule day decorations -->
+    <style name="TextAppearance.MedDose.H2" parent="@style/TextAppearance.MedDose.H1">
+        <item name="android:textSize">@dimen/text_size_h2</item>
+    </style>
+
+    <!-- For other prominent text -->
+    <style name="TextAppearance.MedDose.H3" parent="@style/TextAppearance.MedDose.H1">
+        <item name="android:fontFamily">@font/google_sans_medium</item>
+        <item name="android:textSize">@dimen/text_size_h3</item>
+        <item name="fontFamily">@font/google_sans_medium</item>
+    </style>
+
+    <style name="TextAppearance.MedDose.Button" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:fontFamily">@font/google_sans_medium</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="fontFamily">@font/google_sans_medium</item>
+    </style>
+
+    <!-- List item primary text, e.g. event titles, codelab titles -->
+    <style name="TextAppearance.MedDose.ListPrimary" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:fontFamily">@font/google_sans_medium</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="fontFamily">@font/google_sans_medium</item>
+    </style>
+
+    <!-- Intermediate style to make further style extensions below easier to follow -->
+    <style name="TextAppearance.MedDose.Body2" parent="TextAppearance.MaterialComponents.Body2" />
+
+    <!-- Section headers -->
+    <style name="TextAppearance.MedDose.Overline" parent="@style/TextAppearance.MedDose.Body2">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="TextAppearance.MedDose.NoticeBody" parent="@style/Widget.MedDose.MultilineBody">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextAppearance.MedDose.ToolbarTitle" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:fontFamily">@font/google_sans</item>
+        <item name="android:textSize" tools:ignore="SpUsage">20dp</item>
+    </style>
+
+    <style name="TextAppearance.MedDose.Tab" parent="@style/TextAppearance.Design.Tab">
+        <item name="android:fontFamily">@font/google_sans</item>
+        <item name="android:textStyle">bold</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <!-- Schedule -->
+    <style name="TextAppearance.MedDose.ReservationStatus" parent="@style/TextAppearance.MedDose.Body2">
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="TextAppearance.MedDose.Tag" parent="@style/TextAppearance.MedDose.Body2">
+        <item name="android:fontFamily">monospace</item>
+        <item name="android:letterSpacing">@dimen/tag_letter_spacing</item>
+        <item name="fontFamily">monospace</item>
+    </style>
+
+    <style name="TextAppearance.MedDose.FiltersLabel" parent="TextAppearance.MedDose.H2">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <!-- Map -->
+    <style name="TextAppearance.MedDose.Map.MarkerLabel" parent="TextAppearance.MedDose.Body2">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">monospace</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:letterSpacing">-0.03</item>
+    </style>
+
+    <!-- Info -->
+    <style name="TextAppearance.MedDose.CollapsibleCard" parent="@style/TextAppearance.MedDose.ListPrimary">
+        <item name="android:textColor">?colorPrimary</item>
+    </style>
+
+    <style name="TextAppearance.MedDose.Info.AssistantApp" parent="TextAppearance.MedDose.Body2">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">?colorPrimary</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <!-- Home -->
+    <style name="TextAppearance.MedDose.CountdownLabel" parent="@style/TextAppearance.MaterialComponents.Caption">
+        <item name="android:fontFamily">@font/google_sans</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextAppearance.MedDose.Feed.Session.Time" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <!-- Settings -->
+    <style name="TextAppearance.MedDose.AboutButtons" parent="@style/TextAppearance.MedDose.ListPrimary">
+        <item name="android:textColor">?colorPrimary</item>
+    </style>
+
+    <!-- Account dialogs -->
+    <style name="TextAppearance.MedDose.AccountDialog.Username" parent="@style/TextAppearance.MedDose.ListPrimary" />
+
+    <!-- Widget styles -->
+
+    <style name="Widget.MedDose" parent="@android:style/Widget.Material" />
+
+    <style name="Widget.MedDose.AppBar" parent="@style/Widget.Design.AppBarLayout">
+        <item name="android:background">?attr/colorSurface</item>
+        <item name="android:elevation">8dp</item>
+    </style>
+
+    <style name="Widget.MedDose.Toolbar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="android:paddingEnd">8dp</item>
+        <item name="contentInsetStartWithNavigation">?sessionListKeyline</item>
+        <item name="popupTheme">@style/AppTheme.PopupTheme</item>
+        <item name="titleTextAppearance">@style/TextAppearance.MedDose.ToolbarTitle</item>
+    </style>
+
+    <style name="Widget.MedDose.Tabs" parent="@style/Widget.MaterialComponents.TabLayout">
+        <item name="tabTextAppearance">@style/TextAppearance.MedDose.Tab</item>
+        <!--        <item name="tabIndicator">@drawable/tab_indicator</item>-->
+    </style>
+
+    <!-- textAppearance alone doesn't support line spacing attrs. Multiline body text will use
+         style="Widget.MedDose.MultilineBody" instead of the equivalent textAppearance.
+    -->
+    <style name="Widget.MedDose.MultilineBody">
+        <item name="android:lineSpacingExtra">4sp</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
+    </style>
+
+    <!-- Schedule -->
+    <style name="Widget.MedDose.Tag">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:lines">1</item>
+        <item name="android:textAppearance">@style/TextAppearance.MedDose.Tag</item>
+    </style>
+
+    <style name="Widget.MedDose.Tag.Inline">
+        <item name="android:drawablePadding">@dimen/spacing_micro</item>
+        <!--        <item name="android:drawableStart">@drawable/tag_dot</item>-->
+        <item name="android:textColor">?android:textColorSecondary</item>
+    </style>
+
+    <style name="Widget.MedDose.EventFilters">
+        <item name="android:letterSpacing">@dimen/tag_letter_spacing</item>
+        <item name="android:padding">@dimen/spacing_normal</item>
+        <item name="android:strokeColor">?colorControlLight</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="outlineWidth">1dp</item>
+        <!--        <item name="clearIcon">@drawable/tag_clear</item>-->
+        <item name="foreground">?selectableItemBackground</item>
+        <item name="showIcons">true</item>
+        <item name="cornerRadius">8dp</item>
+    </style>
+
+    <style name="Widget.MedDose.TimeHeaders">
+        <item name="android:width">@dimen/session_keyline</item>
+        <item name="android:fontFamily">@font/google_sans</item>
+        <item name="android:padding">@dimen/schedule_item_padding_vertical</item>
+        <item name="android:textColor">?colorPrimary</item>
+        <item name="timeTextSize">@dimen/time_header_time_text_size</item>
+        <item name="meridiemTextSize">@dimen/time_header_meridiem_text_size</item>
+    </style>
+
+    <style name="Widget.MedDose.DayIndicatorDecoration">
+        <item name="android:color">?colorPrimary</item>
+        <item name="insetVertical">8dp</item>
+    </style>
+
+    <style name="Widget.MedDose.DaySeparatorDecoration">
+        <item name="android:width">@dimen/day_header_decor_width</item>
+        <item name="android:height">@dimen/day_header_decor_height</item>
+        <item name="android:fontFamily">@font/google_sans</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:textSize">@dimen/day_header_text_size</item>
+        <item name="verticalBias">0.67</item>
+    </style>
+
+    <!-- Agenda -->
+    <style name="Widget.MedDose.DateHeaders">
+        <item name="android:width">@dimen/day_header_decor_width</item>
+        <item name="android:height">@dimen/day_header_decor_height</item>
+        <item name="android:fontFamily">@font/google_sans</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:textSize">@dimen/day_header_text_size</item>
+        <item name="verticalBias">0.67</item>
+    </style>
+
+    <!-- Account dialogs -->
+    <style name="Widget.MedDose.BorderlessButton.NormalText" parent="@style/Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textAppearance">?android:textAppearance</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
+    </style>
+
+    <style name="Widget.MedDose.AccountDialog.ActionButton" parent="">
+        <item name="android:background">?selectableItemBackground</item>
+        <item name="android:drawablePadding">@dimen/margin_normal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:minHeight">?listPreferredItemHeightSmall</item>
+        <item name="android:paddingBottom">@dimen/spacing_normal</item>
+        <item name="android:paddingRight">?listPreferredItemPaddingEnd</item>
+        <item name="android:paddingStart">?listPreferredItemPaddingStart</item>
+        <item name="android:paddingTop">@dimen/spacing_normal</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Widget.MedDose.AccountDialog.ManageAccountButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textColor">?android:textColorSecondary</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MaterialComponents.Chip</item>
+    </style>
+
+    <!-- Onboarding -->
+    <style name="Widget.MedDose.OnboardingText">
+        <item name="android:textAppearance">@style/TextAppearance.MedDose.H1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:lineSpacingExtra">6sp</item>
+    </style>
+
+    <!-- Speaker Detail -->
+    <style name="Widget.MedDose.Speaker" />
+
+    <style name="Widget.MedDose.Speaker.Title">
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textAppearance">@style/TextAppearance.MedDose.H1</item>
+    </style>
+
+    <style name="Widget.MedDose.Speaker.SocialButton" parent="@style/Widget.MaterialComponents.Button.TextButton">
+        <item name="android:minWidth">0dp</item>
+    </style>
+
+    <!-- Home -->
+    <style name="Widget.MedDose.Feed" />
+
+    <style name="Widget.MedDose.Feed.Session" />
+
+    <style name="Widget.MedDose.Feed.Session.Title">
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">3</item>
+        <item name="android:textAppearance">?attr/textAppearanceListItem</item>
+    </style>
+
+    <style name="Widget.MedDose.Feed.Card" parent="Widget.MaterialComponents.CardView">
+        <item name="cardElevation">0dp</item>
+        <item name="strokeColor">?android:attr/colorControlHighlight</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="cardCornerRadius">@dimen/feed_card_corner_radius</item>
+    </style>
+
+    <!-- Settings -->
+    <style name="Widget.MedDose.Settings" />
+
+    <style name="Widget.MedDose.Settings.Switch" parent="Widget.MaterialComponents.CompoundButton.Switch">
+        <item name="android:background">@null</item>
+        <item name="android:foreground">?selectableItemBackground</item>
+        <item name="android:minHeight">?android:attr/listPreferredItemHeightSmall</item>
+        <item name="android:padding">@dimen/margin_normal</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="switchPadding">@dimen/margin_small</item>
+        <item name="switchTextAppearance">?attr/textAppearanceBody2</item>
+    </style>
+
+    <style name="Widget.MedDose.Settings.Button">
+        <item name="android:background">?selectableItemBackground</item>
+        <item name="android:gravity">start|center_vertical</item>
+        <item name="android:minHeight">?listPreferredItemHeightSmall</item>
+        <item name="android:paddingBottom">@dimen/spacing_normal</item>
+        <item name="android:paddingRight">?listPreferredItemPaddingEnd</item>
+        <item name="android:paddingStart">?listPreferredItemPaddingStart</item>
+        <item name="android:paddingTop">@dimen/spacing_normal</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:textAppearance">?textAppearanceBody2</item>
+    </style>
+
+    <style name="Widget.MedDose.Settings.Button.About">
+        <item name="android:textAppearance">@style/TextAppearance.MedDose.AboutButtons</item>
+    </style>
+
+    <!-- Info -->
+    <style name="Widget.MedDose.EventCardView" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeColor">?colorControlLight</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="eventTypeLogoBackground">?eventCardHeaderBackground</item>
+    </style>
+
+    <!-- Navigation -->
+    <style name="Widget.MedDose.NavigationBarContentFrameLayout" parent="android:Widget.Material">
+        <item name="navigationBarBorderColor">?attr/MedDoseNavigationBarDividerColor</item>
+        <item name="navigationBarBorderSize">1dp</item>
+    </style>
+
+    <style name="Widget.MedDose.NavigationView" parent="@style/Widget.MaterialComponents.NavigationView">
+        <!--        <item name="itemBackground">@drawable/navigation_item_background</item>-->
+        <item name="itemHorizontalPadding">@dimen/nav_item_horizontal_padding</item>
+    </style>
+
+    <style name="Widget.MedDose.HashtagIoDecoration">
+        <!--        <item name="android:drawable">@drawable/hashtag_io19</item>-->
+        <item name="margin">@dimen/nav_item_horizontal_padding</item>
+    </style>
+
+    <!-- Map -->
+    <style name="Widget.MedDose.Map" />
+
+    <style name="Widget.MedDose.Map.MarkerTitle">
+        <item name="android:ellipsize">end</item>
+        <item name="android:lines">1</item>
+        <item name="android:gravity">start</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:textAppearance">@style/TextAppearance.MedDose.H3</item>
+        <!-- Use dp because we need the title and subtitle to always fit in the sheet peak area. -->
+        <item name="android:textSize" tools:ignore="SpUsage">20dp</item>
+    </style>
+
+    <style name="Widget.MedDose.Map.MarkerSubtitle" parent="Widget.MedDose.Map.MarkerTitle">
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+        <!-- Use dp because we need the title and subtitle to always fit in the sheet peak area. -->
+        <item name="android:textSize" tools:ignore="SpUsage">16dp</item>
+    </style>
+
+    <!-- Misc -->
+    <style name="Widget.MedDose.EmptyResults">
+        <item name="android:drawablePadding">@dimen/margin_normal</item>
+        <!--        <item name="android:drawableTop">@drawable/no_items_found_204</item>-->
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
     </style>
 
 </resources>
