@@ -77,6 +77,14 @@ public class HomeFragment extends Fragment {
                 newFragment.show(getFragmentManager(), "datePicker");
             }
         });
+        fabAddMedicine.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                DialogFragment newFragment = new TimePickerFragment();
+                newFragment.show(getFragmentManager(), "timePicker");
+                return true;
+            }
+        });
 
         return root;
     }
