@@ -57,7 +57,7 @@ public class HomeFragment extends Fragment {
         homeItems = new ArrayList<>();
 
         medicineNames = new String[]{"Crocin", "Panadol", "Cipla"};
-        dosageNames = new String[]{"Twice", "Once-Night", "Morning"};
+        dosageNames = new String[]{"Twice - Day and Night", "Once - Night", "Once - Morning"};
 
         for (int iTmp = 0; iTmp < medicineNames.length; iTmp++)
         {
@@ -73,8 +73,10 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "Showing Add Dialog", Toast.LENGTH_SHORT).show();
-                DialogFragment newFragment = new DatePickerFragment();
-                newFragment.show(getFragmentManager(), "datePicker");
+//                DialogFragment newFragment = new DatePickerFragment();
+//                newFragment.show(getFragmentManager(), "datePicker");
+                AddDialog exampleDialog = new AddDialog();
+                exampleDialog.show(getFragmentManager(), "Add_Dialog");
             }
         });
         fabAddMedicine.setOnLongClickListener(new View.OnLongClickListener() {
