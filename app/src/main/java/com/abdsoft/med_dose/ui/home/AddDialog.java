@@ -1,6 +1,8 @@
 package com.abdsoft.med_dose.ui.home;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,9 @@ import androidx.fragment.app.DialogFragment;
 import com.abdsoft.med_dose.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textview.MaterialTextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class AddDialog extends DialogFragment {
     public static final String TAG = "example_dialog";
@@ -69,14 +74,44 @@ public class AddDialog extends DialogFragment {
             return true;
         });
 
+        final Calendar c = Calendar.getInstance();
+        int mYear = c.get(Calendar.YEAR); // current year
+        int mMonth = c.get(Calendar.MONTH); // current month
+        int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(mYear, mMonth, mDay);
+        SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy");
+        textViewDate.setText(format.format(calendar.getTime()));
+
+
         textViewDate.setOnClickListener(view1 -> {
-            DialogFragment newFragment = new DatePickerFragment();
-            newFragment.show(getFragmentManager(), "datePicker");
+            DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),
+                    (view2, year, monthOfYear, dayOfMonth) -> {
+                        // set day of month , month and year value in the edit text
+                        calendar.set(year, monthOfYear, dayOfMonth);
+                        SimpleDateFormat format1 = new SimpleDateFormat("EEEE, MMMM d, yyyy");
+                        textViewDate.setText(format1.format(calendar.getTime()));
+
+
+                    }, mYear, mMonth, mDay);
+            datePickerDialog.show();
         });
 
+        Calendar mCurrentTime = Calendar.getInstance();
+        int hour = mCurrentTime.get(Calendar.HOUR);
+        int minute = mCurrentTime.get(Calendar.MINUTE);
+        format = new SimpleDateFormat("h:mm a");
+        textViewTime.setText(format.format(mCurrentTime.getTime()));
+
         textViewTime.setOnClickListener(view1 -> {
-            DialogFragment newFragment = new TimePickerFragment();
-            newFragment.show(getFragmentManager(), "timePicker");
+            TimePickerDialog mTimePicker;
+            mTimePicker = new TimePickerDialog(getActivity(), (timePicker, selectedHour, selectedMinute) -> {
+                calendar.set(Calendar.HOUR, selectedHour);
+                calendar.set(Calendar.MINUTE, selectedMinute);
+                SimpleDateFormat format12 = new SimpleDateFormat("h:mm a");
+                textViewTime.setText(format12.format(calendar.getTime()));
+            }, hour, minute, false);//Yes 24 hour time
+            mTimePicker.show();
         });
 
     }
