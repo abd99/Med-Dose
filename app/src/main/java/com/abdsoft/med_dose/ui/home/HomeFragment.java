@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -73,18 +72,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "Showing Add Dialog", Toast.LENGTH_SHORT).show();
-//                DialogFragment newFragment = new DatePickerFragment();
-//                newFragment.show(getFragmentManager(), "datePicker");
-                AddDialog exampleDialog = new AddDialog();
-                exampleDialog.show(getFragmentManager(), "Add_Dialog");
-            }
-        });
-        fabAddMedicine.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                DialogFragment newFragment = new TimePickerFragment();
-                newFragment.show(getFragmentManager(), "timePicker");
-                return true;
+                AddDialog addMedicineDialog = new AddDialog();
+                addMedicineDialog.show(getFragmentManager(), "Add_Dialog");
             }
         });
 
