@@ -55,8 +55,8 @@ public class HomeFragment extends Fragment {
 
         homeItems = new ArrayList<>();
 
-        medicineNames = new String[]{"Crocin", "Panadol", "Cipla"};
-        dosageNames = new String[]{"Twice - Day and Night", "Once - Night", "Once - Morning"};
+        medicineNames = new String[]{"Crocin", "Panadol", "Cipla", "Genx Vast", "K-ion"};
+        dosageNames = new String[]{"Twice - Day and Night", "Once - Night", "Once - Morning", "Once-Night", "Once-Night"};
 
         for (int iTmp = 0; iTmp < medicineNames.length; iTmp++)
         {
