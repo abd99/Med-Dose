@@ -21,7 +21,7 @@
                     android:textSize="26sp"
                     android:text="@string/medicine_name" />-->
 
-                <CheckBox
+                <com.google.android.material.checkbox.MaterialCheckBox
                     android:id="@+id/medicine_checkbox"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"/>
@@ -31,14 +31,14 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <TextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/medicine_name_text_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="26sp"
                         android:text="@string/medicine_name" />
 
-                    <TextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/dosage_text_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

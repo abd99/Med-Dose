@@ -23,7 +23,8 @@
         app:defaultNavHost="true"
         app:navGraph="@navigation/mobile_navigation"
         android:layout_alignTop="@id/my_toolbar"
-        android:layout_alignBottom="@id/nav_view"/>
+        android:layout_alignBottom="@id/nav_view"
+        android:layout_marginBottom="?android:actionBarSize"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"

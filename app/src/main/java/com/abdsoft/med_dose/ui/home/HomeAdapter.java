@@ -4,14 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.abdsoft.med_dose.R;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
 
@@ -51,9 +51,9 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     class ViewHolder extends RecyclerView.ViewHolder
     {
 
-        TextView textMedicine, textDosageSummary;
+        MaterialTextView textMedicine, textDosageSummary;
         MaterialCardView cardView;
-        CheckBox checkBox;
+        MaterialCheckBox checkBox;
 
         ViewHolder(View itemView)
         {

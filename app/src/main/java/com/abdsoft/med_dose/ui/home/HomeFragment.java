@@ -5,9 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.abdsoft.med_dose.HomeActivity;
 import com.abdsoft.med_dose.R;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +50,6 @@ public class HomeFragment extends Fragment {
 //                textView.setText(s);
             }
         });
-
         recyclerView = root.findViewById(R.id.recycler_view_medicine);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -65,6 +67,16 @@ public class HomeFragment extends Fragment {
 
         adapter = new HomeAdapter(homeItems, getActivity());
         recyclerView.setAdapter(adapter);
+
+        ExtendedFloatingActionButton fabAddMedicine = root.findViewById(R.id.fab_add_medicine);
+        fabAddMedicine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Showing Add Dialog", Toast.LENGTH_SHORT).show();
+                DialogFragment newFragment = new DatePickerFragment();
+                newFragment.show(getFragmentManager(), "datePicker");
+            }
+        });
 
         return root;
     }
