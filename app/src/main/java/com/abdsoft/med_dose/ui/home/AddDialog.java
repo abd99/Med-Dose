@@ -13,6 +13,8 @@ import androidx.fragment.app.DialogFragment;
 
 import com.abdsoft.med_dose.R;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.text.SimpleDateFormat;
@@ -23,6 +25,8 @@ public class AddDialog extends DialogFragment {
 
     private MaterialToolbar toolbar;
     private MaterialTextView textViewDate, textViewTime;
+    private ChipGroup chipGroupScheduleTimes;
+
 
    /* public static AddDialog display(FragmentManager fragmentManager) {
         AddDialog exampleDialog = new AddDialog();
@@ -56,6 +60,8 @@ public class AddDialog extends DialogFragment {
         toolbar = root.findViewById(R.id.toolbar);
         textViewDate = root.findViewById(R.id.text_view_select_date);
         textViewTime = root.findViewById(R.id.text_view_select_time);
+        chipGroupScheduleTimes = root.findViewById(R.id.chip_group_times);
+
 
         return root;
     }
@@ -114,5 +120,20 @@ public class AddDialog extends DialogFragment {
             mTimePicker.show();
         });
 
+        initChipGroup(chipGroupScheduleTimes);
+    }
+
+    private void initChipGroup(ChipGroup chipGroup) {
+
+        String[] textArray = getResources().getStringArray(R.array.schedule_arrays);
+        for (String text : textArray) {
+            Chip chip = (Chip) getLayoutInflater().inflate(R.layout.cat_chip_group_item_choice, chipGroup, false);
+            chip.setText(text);
+            chipGroup.addView(chip);
+            chipGroup.setSingleSelection(true);
+            chipGroup.setOnCheckedChangeListener((group, checkedId) -> {
+                Toast.makeText(getContext(), String.valueOf(group.getCheckedChipId()), Toast.LENGTH_LONG).show();
+            });
+        }
     }
 }

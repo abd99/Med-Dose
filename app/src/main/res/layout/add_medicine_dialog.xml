@@ -48,7 +48,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="24dp"
                         android:layout_marginEnd="16dp"
-                        android:hint="Medicine name"
+                        android:hint="@string/medicine_name_hint"
                         android:textSize="24sp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -59,43 +59,63 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:text="From"
+                    android:text="@string/string_from"
                     android:textColor="@color/color_primary"
                     android:textSize="12sp" />
 
-                <LinearLayout
-                    android:id="@+id/linearLayout"
-                    android:layout_width="match_parent"
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text_view_select_date"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:weightSum="3"
-                    android:orientation="horizontal">
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:text="Thu, September 13 2018"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/text_view_select_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
-                        android:layout_weight="2"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        android:text="Thu, September 13 2018"
-                        android:textColor="@android:color/black"
-                        android:textSize="14sp" />
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/text_view_select_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        android:text="Time"
-                        android:textColor="@android:color/black"
-                        android:textSize="14sp" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/string_schedule"
+                    android:textColor="@color/color_primary"
+                    android:textSize="12sp" />
 
-                </LinearLayout>
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chip_group_times"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:checked="true"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:ellipsize="end" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/string_time"
+                    android:textColor="@color/color_primary"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text_view_select_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:text="@string/string_time"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
 
                 <CheckBox
                     android:id="@+id/checkBox"
@@ -106,7 +126,6 @@
                     android:text="All-day" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"

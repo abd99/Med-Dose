@@ -7,4 +7,16 @@
     <string name="medicine_name">Medicine name</string>
     <string name="dosage_summary">Dosage</string>
     <string name="add_medicine">Add Medicine</string>
+    <string name="string_time">Time</string>
+    <string name="medicine_name_hint">Medicine name</string>
+    <string name="string_from">From</string>
+    <string name="string_schedule">Schedule</string>
+
+    <string-array name="schedule_arrays">
+        <item>Once a day</item>
+        <item>Twice a day</item>
+        <item>Thrice a day</item>
+        <item>4 times a day</item>
+        <item>5 times per day</item>
+    </string-array>
 </resources>
