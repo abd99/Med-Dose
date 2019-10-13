@@ -2,7 +2,6 @@ package com.abdsoft.med_dose.ui.home;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,22 +9,33 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.abdsoft.med_dose.R;
+import com.abdsoft.med_dose.ui.home.time.TimeAdapter;
+import com.abdsoft.med_dose.ui.home.time.TimeItem;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class AddDialog extends DialogFragment {
-    public static final String TAG = "example_dialog";
+    public static final String TAG = "add_medicine_dialog";
 
     private MaterialToolbar toolbar;
     private MaterialTextView textViewDate, textViewTime;
     private ChipGroup chipGroupScheduleTimes;
+
+    private List<TimeItem> timeItems;
+    private int mPerday;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
 
 
    /* public static AddDialog display(FragmentManager fragmentManager) {
@@ -61,7 +71,7 @@ public class AddDialog extends DialogFragment {
         textViewDate = root.findViewById(R.id.text_view_select_date);
         textViewTime = root.findViewById(R.id.text_view_select_time);
         chipGroupScheduleTimes = root.findViewById(R.id.chip_group_times);
-
+        recyclerView = root.findViewById(R.id.recycler_view_time);
 
         return root;
     }
@@ -74,7 +84,7 @@ public class AddDialog extends DialogFragment {
             AddDialog.this.dismiss();
         });
         toolbar.setTitle("Add Medicine");
-        toolbar.inflateMenu(R.menu.add_dialog);
+        toolbar.inflateMenu(R.menu.add_dialog_menu);
         toolbar.setOnMenuItemClickListener(item -> {
             AddDialog.this.dismiss();
             return true;
@@ -107,8 +117,9 @@ public class AddDialog extends DialogFragment {
         int hour = mCurrentTime.get(Calendar.HOUR);
         int minute = mCurrentTime.get(Calendar.MINUTE);
         format = new SimpleDateFormat("h:mm a");
-        textViewTime.setText(format.format(mCurrentTime.getTime()));
+//        textViewTime.setText(format.format(mCurrentTime.getTime()));
 
+/*
         textViewTime.setOnClickListener(view1 -> {
             TimePickerDialog mTimePicker;
             mTimePicker = new TimePickerDialog(getActivity(), (timePicker, selectedHour, selectedMinute) -> {
@@ -119,6 +130,7 @@ public class AddDialog extends DialogFragment {
             }, hour, minute, false);//Yes 24 hour time
             mTimePicker.show();
         });
+*/
 
         initChipGroup(chipGroupScheduleTimes);
     }
@@ -130,10 +142,22 @@ public class AddDialog extends DialogFragment {
             Chip chip = (Chip) getLayoutInflater().inflate(R.layout.cat_chip_group_item_choice, chipGroup, false);
             chip.setText(text);
             chipGroup.addView(chip);
-            chipGroup.setSingleSelection(true);
-            chipGroup.setOnCheckedChangeListener((group, checkedId) -> {
-                Toast.makeText(getContext(), String.valueOf(group.getCheckedChipId()), Toast.LENGTH_LONG).show();
-            });
         }
+        chipGroup.setSingleSelection(true);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        timeItems = new ArrayList<>();
+        chipGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            Toast.makeText(getContext(), String.valueOf(group.getCheckedChipId()), Toast.LENGTH_LONG).show();
+            mPerday = group.getCheckedChipId();
+            timeItems.clear();
+            for (int i = 0; i < mPerday; i++) {
+                TimeItem timeItem = new TimeItem("Pick a Time");
+                timeItems.add(timeItem);
+            }
+            adapter = new TimeAdapter(timeItems, getActivity());
+            recyclerView.setAdapter(adapter);
+        });
     }
 }

@@ -11,6 +11,7 @@
     <string name="medicine_name_hint">Medicine name</string>
     <string name="string_from">From</string>
     <string name="string_schedule">Schedule</string>
+    <string name="pick_a_time">Pick a time</string>
 
     <string-array name="schedule_arrays">
         <item>Once a day</item>
