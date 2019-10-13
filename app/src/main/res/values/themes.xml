@@ -29,8 +29,8 @@
         <!-- Window decor -->
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="android:statusBarColor">@color/transparent</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
-        <item name="android:navigationBarColor">@color/nav_bar_scrim</item>
+<!--        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>-->
+<!--        <item name="android:navigationBarColor">@color/nav_bar_scrim</item>-->
 
         <!-- Widget styles -->
         <item name="toolbarStyle">@style/Widget.MedDose.Toolbar</item>
@@ -100,8 +100,8 @@
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="android:statusBarColor">@color/transparent</item>
         <item name="toolbarStyle">@style/Widget.MedDose.Toolbar</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
-        <item name="android:navigationBarColor">@color/nav_bar_scrim</item>
+<!--        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>-->
+<!--        <item name="android:navigationBarColor">@color/nav_bar_scrim</item>-->
     </style>
 
     <style name="AppTheme.Slide">
