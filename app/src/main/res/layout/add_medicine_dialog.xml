@@ -125,32 +125,23 @@
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />-->
 
-                <CheckBox
-                    android:id="@+id/checkBox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:text="All-day" />
-
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:text="Timezone"
+                    android:text="Number of total doses"
                     android:textColor="@color/color_primary"
                     android:textSize="12sp" />
 
-                <TextView
+
+                <NumberPicker
+                    android:id="@+id/number_picker_number_doses"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:text="Indian Standard Time"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
+                    android:paddingBottom="8dp" />
 
             </LinearLayout>
 

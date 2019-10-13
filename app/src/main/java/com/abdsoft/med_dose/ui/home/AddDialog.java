@@ -3,9 +3,11 @@ package com.abdsoft.med_dose.ui.home;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
@@ -26,16 +28,17 @@ import java.util.Calendar;
 import java.util.List;
 
 public class AddDialog extends DialogFragment {
-    public static final String TAG = "add_medicine_dialog";
+    public static final String TAG = "Add_Dialog";
 
     private MaterialToolbar toolbar;
     private MaterialTextView textViewDate, textViewTime;
     private ChipGroup chipGroupScheduleTimes;
 
     private List<TimeItem> timeItems;
-    private int mPerday;
+    private int mPerDay = 0;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
+    private NumberPicker numberPicker;
 
 
    /* public static AddDialog display(FragmentManager fragmentManager) {
@@ -72,6 +75,7 @@ public class AddDialog extends DialogFragment {
         textViewTime = root.findViewById(R.id.text_view_select_time);
         chipGroupScheduleTimes = root.findViewById(R.id.chip_group_times);
         recyclerView = root.findViewById(R.id.recycler_view_time);
+        numberPicker = root.findViewById(R.id.number_picker_number_doses);
 
         return root;
     }
@@ -80,7 +84,7 @@ public class AddDialog extends DialogFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         toolbar.setNavigationOnClickListener(v -> {
-            Toast.makeText(AddDialog.this.getContext(), "Close Pressed", Toast.LENGTH_LONG).show();
+            Toast.makeText(AddDialog.this.getContext(), "Close Pressed", Toast.LENGTH_SHORT).show();
             AddDialog.this.dismiss();
         });
         toolbar.setTitle("Add Medicine");
@@ -131,8 +135,18 @@ public class AddDialog extends DialogFragment {
             mTimePicker.show();
         });
 */
-
         initChipGroup(chipGroupScheduleTimes);
+
+        numberPicker.setMaxValue(50);
+        numberPicker.setMinValue(mPerDay);
+
+        numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                int valuePicker1 = numberPicker.getValue();
+                Log.d("picker value", String.valueOf(valuePicker1));
+            }
+        });
     }
 
     private void initChipGroup(ChipGroup chipGroup) {
@@ -149,10 +163,11 @@ public class AddDialog extends DialogFragment {
 
         timeItems = new ArrayList<>();
         chipGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            Toast.makeText(getContext(), String.valueOf(group.getCheckedChipId()), Toast.LENGTH_LONG).show();
-            mPerday = group.getCheckedChipId();
+            Toast.makeText(getContext(), String.valueOf(group.getCheckedChipId()), Toast.LENGTH_SHORT).show();
+            mPerDay = group.getCheckedChipId();
+            numberPicker.setMinValue(mPerDay);
             timeItems.clear();
-            for (int i = 0; i < mPerday; i++) {
+            for (int i = 0; i < mPerDay; i++) {
                 TimeItem timeItem = new TimeItem("Pick a Time");
                 timeItems.add(timeItem);
             }
