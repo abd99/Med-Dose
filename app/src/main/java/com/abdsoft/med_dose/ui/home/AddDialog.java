@@ -43,6 +43,7 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
     private MaterialTextView textViewDate;
     private EditText editTextMedicineName;
     private ChipGroup chipGroupScheduleTimes;
+    private int[] chipArrayIds = {R.id.chip1, R.id.chip2, R.id.chip3, R.id.chip4, R.id.chip5};
 
     private List<TimeSelectorItem> timeSelectorItems;
     private int mPerDay = 0;
@@ -103,7 +104,7 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
         super.onViewCreated(view, savedInstanceState);
         toolbar.setNavigationOnClickListener(v -> {
             Toast.makeText(AddDialog.this.getContext(), "Close Pressed", Toast.LENGTH_SHORT).show();
-            AddDialog.this.dismiss();
+            dismiss();
         });
         toolbar.setTitle("Add Medicine");
         toolbar.inflateMenu(R.menu.add_dialog_menu);
@@ -151,7 +152,36 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
             mTimePicker.show();
         });
 */
-        initChipGroup(chipGroupScheduleTimes);
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        timeSelectorItems = new ArrayList<>();
+
+        chipGroupScheduleTimes.setOnCheckedChangeListener((chipGroup, id) -> {
+            Chip chip = chipGroup.findViewById(id);
+            if (chip != null){
+                for (int iTmp = 0; iTmp < chipArrayIds.length; iTmp++) {
+                    if (chipGroup.getCheckedChipId() == chipArrayIds[iTmp]) {
+                        mPerDay = iTmp + 1;
+                        Toast.makeText(getContext(), String.valueOf(mPerDay), Toast.LENGTH_LONG).show();
+                        HomeActivity.timeItems.clear();
+                        if (mPerDay >= 0) {
+                            numberPicker.setMinValue(mPerDay);
+                        } else {
+                            numberPicker.setMinValue(0);
+                        }
+                        timeSelectorItems.clear();
+                        for (int i = 0; i < mPerDay; i++) {
+                            TimeSelectorItem timeSelectorItem = new TimeSelectorItem("Pick a Time");
+                            timeSelectorItems.add(timeSelectorItem);
+                        }
+                        adapter = new TimeAdapter(timeSelectorItems, getActivity());
+                        recyclerView.setAdapter(adapter);
+                    }
+                }
+            }
+        });
 
         numberPicker.setMaxValue(50);
         numberPicker.setMinValue(mPerDay);
@@ -165,37 +195,6 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
         });
     }
 
-    private void initChipGroup(ChipGroup chipGroup) {
-
-        String[] textArray = getResources().getStringArray(R.array.schedule_arrays);
-        for (String text : textArray) {
-            Chip chip = (Chip) getLayoutInflater().inflate(R.layout.cat_chip_group_item_choice, chipGroup, false);
-            chip.setText(text);
-            chipGroup.addView(chip);
-        }
-        chipGroup.setSingleSelection(true);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        timeSelectorItems = new ArrayList<>();
-        chipGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            Toast.makeText(getContext(), String.valueOf(group.getCheckedChipId()), Toast.LENGTH_SHORT).show();
-            mPerDay = group.getCheckedChipId();
-            HomeActivity.timeItems.clear();
-            if (mPerDay >= 0) {
-                numberPicker.setMinValue(mPerDay);
-            } else {
-                numberPicker.setMinValue(0);
-            }
-            timeSelectorItems.clear();
-            for (int i = 0; i < mPerDay; i++) {
-                TimeSelectorItem timeSelectorItem = new TimeSelectorItem("Pick a Time");
-                timeSelectorItems.add(timeSelectorItem);
-            }
-            adapter = new TimeAdapter(timeSelectorItems, getActivity());
-            recyclerView.setAdapter(adapter);
-        });
-    }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
@@ -223,8 +222,8 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
         Log.d(TAG, "arrayList:" + timingList);
         DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
         databaseHelper.insertNewMedicine(medicineName, day, month, year, noOfTimesPerDay, noOfDoses, timingList);
-        AddDialog.this.dismissAllowingStateLoss();
         homeFragment.loadMedicines();
+        dismiss();
         return true;
     }
 }

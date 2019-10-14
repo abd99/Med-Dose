@@ -12,12 +12,12 @@
     <string name="string_from">From</string>
     <string name="string_schedule">Schedule</string>
     <string name="pick_a_time">Pick a time</string>
+    <string name="once_a_day">Once a day</string>
+    <string name="twice_a_day">Twice a day</string>
+    <string name="thrice_a_day">Thrice a day</string>
+    <string name="_4_times_a_day">4 times a day</string>
+    <string name="_5_times_per_day">5 times per day</string>
+    <string name="number_of_total_doses">Number of total doses</string>
+    <string name="sample_date">Thu, September 13 2018</string>
 
-    <string-array name="schedule_arrays">
-        <item>Once a day</item>
-        <item>Twice a day</item>
-        <item>Thrice a day</item>
-        <item>4 times a day</item>
-        <item>5 times per day</item>
-    </string-array>
 </resources>
