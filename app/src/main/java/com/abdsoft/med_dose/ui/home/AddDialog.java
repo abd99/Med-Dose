@@ -5,11 +5,14 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,11 +30,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class AddDialog extends DialogFragment {
+public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClickListener {
     public static final String TAG = "Add_Dialog";
 
     private MaterialToolbar toolbar;
-    private MaterialTextView textViewDate, textViewTime;
+    private MaterialTextView textViewDate;
+    private EditText editTextMedicineName;
     private ChipGroup chipGroupScheduleTimes;
 
     private List<TimeItem> timeItems;
@@ -39,6 +43,9 @@ public class AddDialog extends DialogFragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private NumberPicker numberPicker;
+    private int noOfTotalTimes;
+
+    private Calendar calendar;
 
 
    /* public static AddDialog display(FragmentManager fragmentManager) {
@@ -72,7 +79,7 @@ public class AddDialog extends DialogFragment {
 
         toolbar = root.findViewById(R.id.toolbar);
         textViewDate = root.findViewById(R.id.text_view_select_date);
-        textViewTime = root.findViewById(R.id.text_view_select_time);
+        editTextMedicineName = root.findViewById(R.id.editText_medicine_name);
         chipGroupScheduleTimes = root.findViewById(R.id.chip_group_times);
         recyclerView = root.findViewById(R.id.recycler_view_time);
         numberPicker = root.findViewById(R.id.number_picker_number_doses);
@@ -89,16 +96,14 @@ public class AddDialog extends DialogFragment {
         });
         toolbar.setTitle("Add Medicine");
         toolbar.inflateMenu(R.menu.add_dialog_menu);
-        toolbar.setOnMenuItemClickListener(item -> {
-            AddDialog.this.dismiss();
-            return true;
-        });
+        toolbar.setOnMenuItemClickListener(this);
 
         final Calendar c = Calendar.getInstance();
         int mYear = c.get(Calendar.YEAR); // current year
         int mMonth = c.get(Calendar.MONTH); // current month
         int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
-        Calendar calendar = Calendar.getInstance();
+
+        calendar = Calendar.getInstance();
         calendar.set(mYear, mMonth, mDay);
         SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy");
         textViewDate.setText(format.format(calendar.getTime()));
@@ -143,8 +148,8 @@ public class AddDialog extends DialogFragment {
         numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker numberPicker, int i, int i1) {
-                int valuePicker1 = numberPicker.getValue();
-                Log.d("picker value", String.valueOf(valuePicker1));
+                noOfTotalTimes = numberPicker.getValue();
+                Log.d("picker value", String.valueOf(noOfTotalTimes));
             }
         });
     }
@@ -165,7 +170,11 @@ public class AddDialog extends DialogFragment {
         chipGroup.setOnCheckedChangeListener((group, checkedId) -> {
             Toast.makeText(getContext(), String.valueOf(group.getCheckedChipId()), Toast.LENGTH_SHORT).show();
             mPerDay = group.getCheckedChipId();
-            numberPicker.setMinValue(mPerDay);
+            if (mPerDay >= 0) {
+                numberPicker.setMinValue(mPerDay);
+            } else {
+                numberPicker.setMinValue(0);
+            }
             timeItems.clear();
             for (int i = 0; i < mPerDay; i++) {
                 TimeItem timeItem = new TimeItem("Pick a Time");
@@ -174,5 +183,17 @@ public class AddDialog extends DialogFragment {
             adapter = new TimeAdapter(timeItems, getActivity());
             recyclerView.setAdapter(adapter);
         });
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        String medicineName = editTextMedicineName.getText().toString();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int noOfTimesPerDay = mPerDay;
+        int noOfDoses = noOfTotalTimes;
+
+        return true;
     }
 }
