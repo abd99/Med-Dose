@@ -53,8 +53,13 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
 
     private Calendar calendar;
 
+    private HomeFragment homeFragment;
 
-   /* public static AddDialog display(FragmentManager fragmentManager) {
+    public AddDialog(HomeFragment homeFragment) {
+        this.homeFragment = homeFragment;
+    }
+
+    /* public static AddDialog display(FragmentManager fragmentManager) {
         AddDialog exampleDialog = new AddDialog();
         exampleDialog.show(fragmentManager, TAG);
         return exampleDialog;
@@ -219,6 +224,7 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
         DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
         databaseHelper.insertNewMedicine(medicineName, day, month, year, noOfTimesPerDay, noOfDoses, timingList);
         AddDialog.this.dismissAllowingStateLoss();
+        homeFragment.loadMedicines();
         return true;
     }
 }

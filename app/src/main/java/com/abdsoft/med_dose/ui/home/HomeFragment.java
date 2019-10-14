@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.abdsoft.med_dose.HomeActivity;
 import com.abdsoft.med_dose.R;
+import com.abdsoft.med_dose.db.DatabaseHelper;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class HomeFragment extends Fragment {
     private String[] medicineNames, dosageNames;
 
     HomeActivity homeActivity;
+    DatabaseHelper databaseHelper;
 
 
     private List<HomeItem> homeItems;
@@ -55,7 +57,7 @@ public class HomeFragment extends Fragment {
 
         homeItems = new ArrayList<>();
 
-        medicineNames = new String[]{"Crocin", "Panadol", "Cipla", "Genx Vast", "K-ion"};
+        /*medicineNames = new String[]{"Crocin", "Panadol", "Cipla", "Genx Vast", "K-ion"};
         dosageNames = new String[]{"Twice - Day and Night", "Once - Night", "Once - Morning", "Once-Night", "Once-Night"};
 
         for (int iTmp = 0; iTmp < medicineNames.length; iTmp++)
@@ -65,18 +67,27 @@ public class HomeFragment extends Fragment {
         }
 
         adapter = new HomeAdapter(homeItems, getActivity());
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);*/
+        loadMedicines();
 
         ExtendedFloatingActionButton fabAddMedicine = root.findViewById(R.id.fab_add_medicine);
         fabAddMedicine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "Showing Add Dialog", Toast.LENGTH_SHORT).show();
-                AddDialog addMedicineDialog = new AddDialog();
+                AddDialog addMedicineDialog = new AddDialog(HomeFragment.this);
                 addMedicineDialog.show(getFragmentManager(), "Add_Dialog");
             }
         });
 
         return root;
+    }
+
+    public void loadMedicines() {
+        databaseHelper = new DatabaseHelper(getContext());
+        homeItems = databaseHelper.getMedicineList();
+
+        adapter = new HomeAdapter(homeItems, getActivity());
+        recyclerView.setAdapter(adapter);
     }
 }

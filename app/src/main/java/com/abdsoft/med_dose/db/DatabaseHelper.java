@@ -77,9 +77,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.query(DB_TABLE, new String[]{KEY_NAME, KEY_TIMES_PER_DAY}, null, null, null, null, null);
         while (cursor.moveToNext()) {
-            HomeItem homeItem = new HomeItem(cursor.getString(0)  , cursor.getString(1));
+            HomeItem homeItem = new HomeItem(cursor.getString(0)  , cursor.getString(1) + " times a day");
             medicineList.add(homeItem);
         }
         return medicineList;
+       /* JSONObject json = new JSONObject(stringreadfromsqlite);
+        ArrayList items = json.optJSONArray("uniqueArrays");*/
     }
 }
