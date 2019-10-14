@@ -9,22 +9,29 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.abdsoft.med_dose.HomeActivity;
 import com.abdsoft.med_dose.R;
+import com.abdsoft.med_dose.ui.home.TimeItem;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+
+
 public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.ViewHolder>  {
 
-    private List<TimeItem> timeItems;
+    private List<TimeSelectorItem> timeSelectorItems;
     private Context context;
+    HomeActivity homeActivity;
 
-    public TimeAdapter(List<TimeItem> timeItems, Context context) {
-        this.timeItems = timeItems;
+
+    public TimeAdapter(List<TimeSelectorItem> timeSelectorItems, Context context) {
+        this.timeSelectorItems = timeSelectorItems;
         this.context = context;
     }
+
 
     @NonNull
     @Override
@@ -38,9 +45,11 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.ViewHolder>  {
     @Override
     public void onBindViewHolder(@NonNull TimeAdapter.ViewHolder holder, int position) {
 
-        TimeItem timeItem = timeItems.get(position);
+        homeActivity = (HomeActivity)context;
 
-        holder.textViewTime.setText(timeItem.getTime());
+        TimeSelectorItem timeSelectorItem = timeSelectorItems.get(position);
+
+        holder.textViewTime.setText(timeSelectorItem.getTime());
 
         Calendar mCurrentTime = Calendar.getInstance();
         int hour = mCurrentTime.get(Calendar.HOUR);
@@ -53,6 +62,13 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.ViewHolder>  {
                 mCurrentTime.set(Calendar.MINUTE, selectedMinute);
                 SimpleDateFormat format12 = new SimpleDateFormat("h:mm a");
                 holder.textViewTime.setText(format12.format(mCurrentTime.getTime()));
+                for (int j = 0; j < homeActivity.timeItems.size(); j++) {
+                    if (homeActivity.timeItems.get(j).getPosInRecyclerView() == position) {
+                        homeActivity.timeItems.remove(j);
+                        break;
+                    }
+                }
+                homeActivity.timeItems.add(new TimeItem(selectedHour, selectedMinute, position));
             }, hour, minute, false);//Yes 24 hour time
             mTimePicker.show();
         });
@@ -60,7 +76,7 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.ViewHolder>  {
 
     @Override
     public int getItemCount() {
-        return timeItems.size();
+        return timeSelectorItems.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

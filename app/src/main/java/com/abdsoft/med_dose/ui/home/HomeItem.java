@@ -1,11 +1,11 @@
 package com.abdsoft.med_dose.ui.home;
 
-class HomeItem {
+public class HomeItem {
 
     private String medicineName;
     private String dosageSummary;
 
-    HomeItem(String medicineName, String dosageSummary) {
+    public HomeItem(String medicineName, String dosageSummary) {
         this.medicineName = medicineName;
         this.dosageSummary = dosageSummary;
     }

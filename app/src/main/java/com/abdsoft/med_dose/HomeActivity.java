@@ -11,10 +11,15 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.abdsoft.med_dose.ui.home.TimeItem;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
+
 public class HomeActivity extends AppCompatActivity {
+
+    public static ArrayList<TimeItem> timeItems= new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,10 +1,10 @@
 package com.abdsoft.med_dose.ui.home.time;
 
-public class TimeItem {
+public class TimeSelectorItem {
 
     private String time;
 
-    public TimeItem(String time) {
+    public TimeSelectorItem(String time) {
         this.time = time;
     }
 

@@ -17,13 +17,19 @@ import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.abdsoft.med_dose.HomeActivity;
 import com.abdsoft.med_dose.R;
+import com.abdsoft.med_dose.db.DatabaseHelper;
 import com.abdsoft.med_dose.ui.home.time.TimeAdapter;
-import com.abdsoft.med_dose.ui.home.time.TimeItem;
+import com.abdsoft.med_dose.ui.home.time.TimeSelectorItem;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textview.MaterialTextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,7 +44,7 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
     private EditText editTextMedicineName;
     private ChipGroup chipGroupScheduleTimes;
 
-    private List<TimeItem> timeItems;
+    private List<TimeSelectorItem> timeSelectorItems;
     private int mPerDay = 0;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -166,21 +172,22 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        timeItems = new ArrayList<>();
+        timeSelectorItems = new ArrayList<>();
         chipGroup.setOnCheckedChangeListener((group, checkedId) -> {
             Toast.makeText(getContext(), String.valueOf(group.getCheckedChipId()), Toast.LENGTH_SHORT).show();
             mPerDay = group.getCheckedChipId();
+            HomeActivity.timeItems.clear();
             if (mPerDay >= 0) {
                 numberPicker.setMinValue(mPerDay);
             } else {
                 numberPicker.setMinValue(0);
             }
-            timeItems.clear();
+            timeSelectorItems.clear();
             for (int i = 0; i < mPerDay; i++) {
-                TimeItem timeItem = new TimeItem("Pick a Time");
-                timeItems.add(timeItem);
+                TimeSelectorItem timeSelectorItem = new TimeSelectorItem("Pick a Time");
+                timeSelectorItems.add(timeSelectorItem);
             }
-            adapter = new TimeAdapter(timeItems, getActivity());
+            adapter = new TimeAdapter(timeSelectorItems, getActivity());
             recyclerView.setAdapter(adapter);
         });
     }
@@ -194,6 +201,24 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
         int noOfTimesPerDay = mPerDay;
         int noOfDoses = noOfTotalTimes;
 
+        HomeActivity homeActivity = (HomeActivity) getActivity();
+
+        ArrayList<String> takeTime = new ArrayList<>();
+        for (int i = 0; i < homeActivity.timeItems.size(); i++) {
+            takeTime.add(homeActivity.timeItems.get(i).getHour() + "," + homeActivity.timeItems.get(i).getMinute());
+        }
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("timingArrays", new JSONArray(takeTime));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String timingList = json.toString();
+        Log.d(TAG, "arrayList:" + timingList);
+        DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
+        databaseHelper.insertNewMedicine(medicineName, day, month, year, noOfTimesPerDay, noOfDoses, timingList);
+        AddDialog.this.dismissAllowingStateLoss();
         return true;
     }
 }
