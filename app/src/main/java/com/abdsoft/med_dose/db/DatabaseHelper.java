@@ -6,9 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.abdsoft.med_dose.ui.dashboard.HistoryItem;
 import com.abdsoft.med_dose.ui.home.HomeItem;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -83,5 +86,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return medicineList;
        /* JSONObject json = new JSONObject(stringreadfromsqlite);
         ArrayList items = json.optJSONArray("uniqueArrays");*/
+    }
+
+    public int getId(String name) {
+        int id = 0;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(DB_TABLE, new String[]{KEY_NAME, KEY_TIMES_PER_DAY}, null, null, null, null, null);
+        while (cursor.moveToNext()) {
+            id = cursor.getInt(0);
+        }
+        return id;
+    }
+
+    public List<HistoryItem> getMedicineHistory() {
+        List<HistoryItem> historyList = new ArrayList<>();
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(DB_TABLE, new String[]{KEY_NAME, KEY_DAY, KEY_MONTH, KEY_YEAR, KEY_TIMES_PER_DAY, KEY_TOTAL_DOSES, KEY_TIMINGS}, null, null, null, null, null);
+        while (cursor.moveToNext()) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(cursor.getInt(3), cursor.getInt(2), cursor.getInt(1));
+            SimpleDateFormat format1 = new SimpleDateFormat("EEEE, MMMM d, yyyy");
+            String date = format1.format(calendar.getTime());
+            HistoryItem historyItem= new HistoryItem(cursor.getString(0)  , date, cursor.getInt(4), cursor.getInt(5), cursor.getString(6));
+            historyList.add(historyItem);
+        }
+        return historyList;
     }
 }
