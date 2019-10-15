@@ -9,15 +9,15 @@
     tools:context=".MainActivity">
 
     <com.mikhaellopez.circularfillableloaders.CircularFillableLoaders
-        android:layout_width="175dp"
-        android:layout_height="175dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:id="@+id/progressbar"
-        android:src="@mipmap/ic_launcher_round"
+        android:src="@mipmap/ic_launcher"
         android:layout_gravity="center"
         android:scaleType="centerCrop"
         app:cfl_border="true"
-        app:cfl_border_width="8dp"
-        app:cfl_progress="70"
+        app:cfl_border_width="1dp"
+        app:cfl_progress="75"
         android:padding="40dp"
         app:cfl_wave_amplitude="0.06"
         app:cfl_wave_color="@color/color_primary"/>
