@@ -19,5 +19,6 @@
     <string name="_5_times_per_day">5 times per day</string>
     <string name="number_of_total_doses">Number of total doses</string>
     <string name="sample_date">Thu, September 13 2018</string>
+    <string name="privacy_policy">Privacy Policy</string>
 
 </resources>
