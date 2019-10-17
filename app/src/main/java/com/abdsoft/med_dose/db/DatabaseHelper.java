@@ -83,6 +83,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             HomeItem homeItem = new HomeItem(cursor.getString(0)  , cursor.getString(1) + " times a day");
             medicineList.add(homeItem);
         }
+        db.close();
         return medicineList;
        /* JSONObject json = new JSONObject(stringreadfromsqlite);
         ArrayList items = json.optJSONArray("uniqueArrays");*/
@@ -95,6 +96,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         while (cursor.moveToNext()) {
             id = cursor.getInt(0);
         }
+        db.close();
         return id;
     }
 
@@ -110,6 +112,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             HistoryItem historyItem= new HistoryItem(cursor.getString(0)  , date, cursor.getInt(4), cursor.getInt(5), cursor.getString(6));
             historyList.add(historyItem);
         }
+        db.close();
         return historyList;
     }
 }
