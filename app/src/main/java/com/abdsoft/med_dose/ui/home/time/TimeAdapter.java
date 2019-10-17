@@ -52,13 +52,13 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.ViewHolder>  {
         holder.textViewTime.setText(timeSelectorItem.getTime());
 
         Calendar mCurrentTime = Calendar.getInstance();
-        int hour = mCurrentTime.get(Calendar.HOUR);
+        int hour = mCurrentTime.get(Calendar.HOUR_OF_DAY);
         int minute = mCurrentTime.get(Calendar.MINUTE);
 
         holder.textViewTime.setOnClickListener(view1 -> {
             TimePickerDialog mTimePicker;
             mTimePicker = new TimePickerDialog(context, (timePicker, selectedHour, selectedMinute) -> {
-                mCurrentTime.set(Calendar.HOUR, selectedHour);
+                mCurrentTime.set(Calendar.HOUR_OF_DAY, selectedHour);
                 mCurrentTime.set(Calendar.MINUTE, selectedMinute);
                 SimpleDateFormat format12 = new SimpleDateFormat("h:mm a");
                 holder.textViewTime.setText(format12.format(mCurrentTime.getTime()));

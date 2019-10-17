@@ -1,7 +1,11 @@
 package com.abdsoft.med_dose.ui.home;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -164,7 +168,7 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
                 for (int iTmp = 0; iTmp < chipArrayIds.length; iTmp++) {
                     if (chipGroup.getCheckedChipId() == chipArrayIds[iTmp]) {
                         mPerDay = iTmp + 1;
-                        Toast.makeText(getContext(), String.valueOf(mPerDay), Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getContext(), String.valueOf(mPerDay), Toast.LENGTH_LONG).show();
                         HomeActivity.timeItems.clear();
                         if (mPerDay >= 0) {
                             numberPicker.setMinValue(mPerDay);
@@ -209,7 +213,7 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
 
         ArrayList<String> takeTime = new ArrayList<>();
         for (int i = 0; i < homeActivity.timeItems.size(); i++) {
-            takeTime.add(homeActivity.timeItems.get(i).getHour() + "," + homeActivity.timeItems.get(i).getMinute());
+            takeTime.add(homeActivity.timeItems.get(i).getHour() + ":" + homeActivity.timeItems.get(i).getMinute());
         }
 
         JSONObject json = new JSONObject();
@@ -222,8 +226,26 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
         Log.d(TAG, "arrayList:" + timingList);
         DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
         databaseHelper.insertNewMedicine(medicineName, day, month, year, noOfTimesPerDay, noOfDoses, timingList);
+        Calendar calendar = Calendar.getInstance();
+        for (int iTmp = 0; iTmp < homeActivity.timeItems.size(); iTmp++) {
+            calendar.set(Calendar.HOUR_OF_DAY, homeActivity.timeItems.get(iTmp).getHour());
+            calendar.set(Calendar.MINUTE, homeActivity.timeItems.get(iTmp).getMinute());
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            setAlarm(calendar, medicineName);
+        }
         homeFragment.loadMedicines();
         dismiss();
         return true;
+    }
+
+    public void setAlarm(Calendar mCurrentTime, String medicineName) {
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+
+        Intent notificationIntent = new Intent(getContext(), AlarmReceiver.class);
+        notificationIntent.putExtra("medicineName", medicineName);
+        PendingIntent broadcast = PendingIntent.getBroadcast(getContext(), 100, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, mCurrentTime.getTimeInMillis(), broadcast);
+        Toast.makeText(getContext(), mCurrentTime.get(Calendar.HOUR_OF_DAY) + ":" + mCurrentTime.get(Calendar.MINUTE), Toast.LENGTH_SHORT).show();
     }
 }

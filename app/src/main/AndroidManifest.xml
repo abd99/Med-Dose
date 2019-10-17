@@ -22,7 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.home.ReminderActivity"/>
+
+        <receiver android:name=".ui.home.AlarmReceiver"/>
     </application>
 
 </manifest>
