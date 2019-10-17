@@ -45,7 +45,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "%s INTEGER NOT NULL, " +
                 "%s TEXT NOT NULL);", DB_TABLE, KEY_ID, KEY_NAME, KEY_DAY, KEY_MONTH, KEY_YEAR, KEY_TIMES_PER_DAY, KEY_TOTAL_DOSES, KEY_TIMINGS);
         sqLiteDatabase.execSQL(query);
-
+        sqLiteDatabase.close();
     }
 
     @Override
@@ -53,6 +53,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String queryUpgrade = String.format("DELETE TABLE IF EXISTS %s", DB_TABLE);
         sqLiteDatabase.execSQL(queryUpgrade);
         onCreate(sqLiteDatabase);
+        sqLiteDatabase.close();
     }
 
     public void insertNewMedicine(String medicineName, int day, int month, int year, int noOfTimesPerDay, int totalDoses, String timings) {
