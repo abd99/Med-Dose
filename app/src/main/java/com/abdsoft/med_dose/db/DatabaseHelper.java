@@ -45,7 +45,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "%s INTEGER NOT NULL, " +
                 "%s TEXT NOT NULL);", DB_TABLE, KEY_ID, KEY_NAME, KEY_DAY, KEY_MONTH, KEY_YEAR, KEY_TIMES_PER_DAY, KEY_TOTAL_DOSES, KEY_TIMINGS);
         sqLiteDatabase.execSQL(query);
-        sqLiteDatabase.close();
     }
 
     @Override
@@ -53,7 +52,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String queryUpgrade = String.format("DELETE TABLE IF EXISTS %s", DB_TABLE);
         sqLiteDatabase.execSQL(queryUpgrade);
         onCreate(sqLiteDatabase);
-        sqLiteDatabase.close();
     }
 
     public void insertNewMedicine(String medicineName, int day, int month, int year, int noOfTimesPerDay, int totalDoses, String timings) {
@@ -78,7 +76,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public List<HomeItem> getMedicineList() {
         List<HomeItem> medicineList = new ArrayList<>();
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(DB_TABLE, new String[]{KEY_NAME, KEY_TIMES_PER_DAY}, null, null, null, null, null);
         while (cursor.moveToNext()) {
             HomeItem homeItem = new HomeItem(cursor.getString(0)  , cursor.getString(1) + " times a day");
@@ -103,7 +101,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public List<HistoryItem> getMedicineHistory() {
         List<HistoryItem> historyList = new ArrayList<>();
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(DB_TABLE, new String[]{KEY_NAME, KEY_DAY, KEY_MONTH, KEY_YEAR, KEY_TIMES_PER_DAY, KEY_TOTAL_DOSES, KEY_TIMINGS}, null, null, null, null, null);
         while (cursor.moveToNext()) {
             Calendar calendar = Calendar.getInstance();
