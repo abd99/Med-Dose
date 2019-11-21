@@ -29,8 +29,8 @@
         <!-- Window decor -->
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="android:statusBarColor">@color/transparent</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
-        <item name="android:navigationBarColor">@color/nav_bar_scrim</item>
+<!--        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>-->
+<!--        <item name="android:navigationBarColor">@color/nav_bar_scrim</item>-->
 
         <!-- Widget styles -->
         <item name="toolbarStyle">@style/Widget.MedDose.Toolbar</item>
@@ -88,6 +88,25 @@
         <item name="materialAlertDialogTitleTextStyle">@style/AlertDialog.TitleText</item>
         <item name="materialAlertDialogTitlePanelStyle">@style/AlertDialog.TitlePanel</item>
         <item name="materialAlertDialogBodyTextStyle">@style/AlertDialog.BodyText</item>
+    </style>
+
+    <style name="AppTheme.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="colorPrimaryDark">@color/color_primary_dark</item>
+        <item name="colorAccent">@color/deep_sky_blue</item>
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="actionMenuTextColor">@color/deep_sky_blue</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="toolbarStyle">@style/Widget.MedDose.Toolbar</item>
+<!--        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>-->
+<!--        <item name="android:navigationBarColor">@color/nav_bar_scrim</item>-->
+    </style>
+
+    <style name="AppTheme.Slide">
+        <item name="android:windowEnterAnimation">@anim/slide_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_down</item>
     </style>
 
 </resources>

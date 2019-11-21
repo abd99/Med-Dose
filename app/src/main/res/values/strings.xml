@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">Med-Dose</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_settings">Settings</string>
+    <string name="medicine_name">Medicine name</string>
+    <string name="dosage_summary">Dosage</string>
+    <string name="add_medicine">Add Medicine</string>
+    <string name="string_time">Time</string>
+    <string name="medicine_name_hint">Medicine name</string>
+    <string name="string_from">From</string>
+    <string name="string_schedule">Schedule</string>
+    <string name="pick_a_time">Pick a time</string>
+    <string name="once_a_day">Once a day</string>
+    <string name="twice_a_day">Twice a day</string>
+    <string name="thrice_a_day">Thrice a day</string>
+    <string name="_4_times_a_day">4 times a day</string>
+    <string name="_5_times_per_day">5 times per day</string>
+    <string name="number_of_total_doses">Number of total doses</string>
+    <string name="sample_date">Thu, September 13 2018</string>
+    <string name="privacy_policy">Privacy Policy</string>
+
 </resources>
