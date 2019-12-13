@@ -15,7 +15,7 @@
     <color name="bright_orange">#ff6c00</color>
 
     <color name="white">#ffff</color>
-    <!--    <color name="black">#000</color>-->
+        <color name="black">#000</color>
     <color name="transparent">#0fff</color>
 
     <color name="color_primary">@color/deep_sky_blue</color>
