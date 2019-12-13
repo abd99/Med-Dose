@@ -4,8 +4,8 @@ import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +21,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.abdsoft.med_dose.AlarmActivity;
 import com.abdsoft.med_dose.HomeActivity;
 import com.abdsoft.med_dose.R;
 import com.abdsoft.med_dose.db.DatabaseHelper;
@@ -39,6 +40,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import static android.content.Context.ALARM_SERVICE;
 
 public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClickListener {
     public static final String TAG = "Add_Dialog";
@@ -203,6 +206,10 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         String medicineName = editTextMedicineName.getText().toString();
+        if (medicineName.isEmpty()) {
+            editTextMedicineName.setError("Enter a name");
+            return false;
+        }
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -233,6 +240,7 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.MILLISECOND, 0);
             setAlarm(calendar, medicineName);
+            Log.i("AddDialog.java", String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)) + ":" +String.valueOf(calendar.get(Calendar.MINUTE)));
         }
         homeFragment.loadMedicines();
         dismiss();
@@ -240,7 +248,7 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
     }
 
     public void setAlarm(Calendar mCurrentTime, String medicineName) {
-        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+       /* AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
 
         Intent notificationIntent = new Intent(getContext(), AlarmReceiver.class);
         notificationIntent.putExtra("medicineName", medicineName);
@@ -248,5 +256,22 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, mCurrentTime.getTimeInMillis(), broadcast);
         Toast.makeText(getContext(), mCurrentTime.get(Calendar.HOUR_OF_DAY) + ":" + mCurrentTime.get(Calendar.MINUTE), Toast.LENGTH_SHORT).show();
         Log.d(TAG, mCurrentTime.get(Calendar.HOUR_OF_DAY) + ":" + mCurrentTime.get(Calendar.MINUTE));
+
+*/
+        Intent intent = new Intent(getActivity(), AlarmActivity.class);
+        intent.putExtra("medicineName", medicineName);
+
+        PendingIntent operation = PendingIntent.getActivity(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        /** Getting a reference to the System Service ALARM_SERVICE */
+        AlarmManager alarmManagerNew = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+
+//        alarmManagerNew.setRepeating(AlarmManager.RTC_WAKEUP, mCurrentTime.getTimeInMillis(),
+//                AlarmManager.INTERVAL_DAY * 7, operation);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManagerNew.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mCurrentTime.getTimeInMillis(), operation);
+        } else
+            alarmManagerNew.setExact(AlarmManager.RTC_WAKEUP, mCurrentTime.getTimeInMillis(), operation);
+
     }
 }

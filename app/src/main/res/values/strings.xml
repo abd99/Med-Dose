@@ -20,5 +20,9 @@
     <string name="number_of_total_doses">Number of total doses</string>
     <string name="sample_date">Thu, September 13 2018</string>
     <string name="privacy_policy">Privacy Policy</string>
+    <string name="time_to_take">Time to take&#160;</string>
+    <string name="snooze">Snooze</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="take">Take</string>
 
 </resources>
