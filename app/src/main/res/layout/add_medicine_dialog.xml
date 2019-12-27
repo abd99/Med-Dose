@@ -100,6 +100,8 @@
                         android:layout_height="wrap_content"
                         android:checked="true"
                         app:singleSelection="true"
+                        app:selectionRequired="true"
+                        app:checkedChip="@+id/chip1"
                         app:singleLine="true"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:ellipsize="end" >
@@ -213,6 +215,8 @@
                         android:layout_height="wrap_content"
                         android:checked="true"
                         app:singleSelection="true"
+                        app:selectionRequired="true"
+                        app:checkedChip="@+id/chip_alarm"
                         app:singleLine="true"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:ellipsize="end" >

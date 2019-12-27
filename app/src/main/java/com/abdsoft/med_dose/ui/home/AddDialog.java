@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -54,7 +55,7 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
     private int[] chipAlertArrayIds = {R.id.chip_notification, R.id.chip_alarm, R.id.chip_both};
 
     private List<TimeSelectorItem> timeSelectorItems;
-    private int mPerDay = 0;
+    private int mPerDay = 1;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private NumberPicker numberPicker;
@@ -168,6 +169,19 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
 
         timeSelectorItems = new ArrayList<>();
 
+        HomeActivity.timeItems.clear();
+        if (mPerDay > 0) {
+            numberPicker.setMinValue(mPerDay);
+        } else {
+            numberPicker.setMinValue(0);
+        }
+        timeSelectorItems.clear();
+        for (int i = 0; i < mPerDay; i++) {
+            TimeSelectorItem timeSelectorItem = new TimeSelectorItem("Pick a Time");
+            timeSelectorItems.add(timeSelectorItem);
+        }
+        adapter = new TimeAdapter(timeSelectorItems, getActivity());
+        recyclerView.setAdapter(adapter);
         chipGroupScheduleTimes.setOnCheckedChangeListener((chipGroup, id) -> {
             Chip chip = chipGroup.findViewById(id);
             if (chip != null){
@@ -176,7 +190,7 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
                         mPerDay = iTmp + 1;
 //                        Toast.makeText(getContext(), String.valueOf(mPerDay), Toast.LENGTH_LONG).show();
                         HomeActivity.timeItems.clear();
-                        if (mPerDay >= 0) {
+                        if (mPerDay > 0) {
                             numberPicker.setMinValue(mPerDay);
                         } else {
                             numberPicker.setMinValue(0);
@@ -206,16 +220,24 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
 
         chipGroupAlertType.setOnCheckedChangeListener((chipGroup, id) -> {
             Chip chip = chipGroup.findViewById(id);
-            altertType = chip.getText().toString();
+            if (chip != null)
+                altertType = chip.getText().toString();
+            else
+                showAlertDialog("Alert Type");
         });
     }
 
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
+        HomeActivity homeActivity = (HomeActivity) getActivity();
         String medicineName = editTextMedicineName.getText().toString();
         if (medicineName.isEmpty()) {
             editTextMedicineName.setError("Enter a name");
+            return false;
+        }
+        if (homeActivity.timeItems.size() != mPerDay) {
+            showAlertDialog("Time");
             return false;
         }
         int year = calendar.get(Calendar.YEAR);
@@ -224,7 +246,6 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
         int noOfTimesPerDay = mPerDay;
         int noOfDoses = noOfTotalTimes;
 
-        HomeActivity homeActivity = (HomeActivity) getActivity();
 
         ArrayList<String> takeTime = new ArrayList<>();
         for (int i = 0; i < homeActivity.timeItems.size(); i++) {
@@ -293,5 +314,18 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, mNotificationTime.getTimeInMillis(), broadcast);
         Toast.makeText(getContext(), mNotificationTime.get(Calendar.HOUR_OF_DAY) + ":" + mNotificationTime.get(Calendar.MINUTE), Toast.LENGTH_SHORT).show();
         Log.d(TAG, mNotificationTime.get(Calendar.HOUR_OF_DAY) + ":" + mNotificationTime.get(Calendar.MINUTE));
+    }
+
+    public void showAlertDialog(String nonSelectedItem) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setMessage("Please select all the fields or enter all the values to move forward.\n\nNon-selected item(s) found: \n" + nonSelectedItem)
+                .setTitle("Select all fields to continue");
+
+        builder.setNeutralButton("OK", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
     }
 }
