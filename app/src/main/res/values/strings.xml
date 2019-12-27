@@ -24,5 +24,9 @@
     <string name="snooze">Snooze</string>
     <string name="dismiss">Dismiss</string>
     <string name="take">Take</string>
+    <string name="notification">Notification</string>
+    <string name="alarm">Alarm</string>
+    <string name="both">Both</string>
+    <string name="alert_type">Alert type</string>
 
 </resources>

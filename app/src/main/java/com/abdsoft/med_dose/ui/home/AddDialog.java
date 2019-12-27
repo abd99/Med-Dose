@@ -49,8 +49,9 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
     private MaterialToolbar toolbar;
     private MaterialTextView textViewDate;
     private EditText editTextMedicineName;
-    private ChipGroup chipGroupScheduleTimes;
+    private ChipGroup chipGroupScheduleTimes, chipGroupAlertType;
     private int[] chipArrayIds = {R.id.chip1, R.id.chip2, R.id.chip3, R.id.chip4, R.id.chip5};
+    private int[] chipAlertArrayIds = {R.id.chip_notification, R.id.chip_alarm, R.id.chip_both};
 
     private List<TimeSelectorItem> timeSelectorItems;
     private int mPerDay = 0;
@@ -58,6 +59,7 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
     private RecyclerView.Adapter adapter;
     private NumberPicker numberPicker;
     private int noOfTotalTimes;
+    private String altertType;
 
     private Calendar calendar;
 
@@ -102,6 +104,7 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
         chipGroupScheduleTimes = root.findViewById(R.id.chip_group_times);
         recyclerView = root.findViewById(R.id.recycler_view_time);
         numberPicker = root.findViewById(R.id.number_picker_number_doses);
+        chipGroupAlertType = root.findViewById(R.id.chip_group_alert_type);
 
         return root;
     }
@@ -200,6 +203,11 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
                 Log.d("picker value", String.valueOf(noOfTotalTimes));
             }
         });
+
+        chipGroupAlertType.setOnCheckedChangeListener((chipGroup, id) -> {
+            Chip chip = chipGroup.findViewById(id);
+            altertType = chip.getText().toString();
+        });
     }
 
 
@@ -234,30 +242,30 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
         DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
         databaseHelper.insertNewMedicine(medicineName, day, month, year, noOfTimesPerDay, noOfDoses, timingList);
         Calendar calendar = Calendar.getInstance();
-        for (int iTmp = 0; iTmp < homeActivity.timeItems.size(); iTmp++) {
-            calendar.set(Calendar.HOUR_OF_DAY, homeActivity.timeItems.get(iTmp).getHour());
-            calendar.set(Calendar.MINUTE, homeActivity.timeItems.get(iTmp).getMinute());
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-            setAlarm(calendar, medicineName);
-            Log.i("AddDialog.java", String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)) + ":" +String.valueOf(calendar.get(Calendar.MINUTE)));
+        calendar.set(Calendar.HOUR_OF_DAY, homeActivity.timeItems.get(0).getHour());
+        calendar.set(Calendar.MINUTE, homeActivity.timeItems.get(0).getMinute());
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        switch (altertType) {
+            case "Notification":
+                setNotification(calendar, medicineName);
+                break;
+            case "Alarm":
+                setAlarm(calendar, medicineName);
+                break;
+            default:
+                setAlarm(calendar, medicineName);
+                setNotification(calendar, medicineName);
+                break;
+
         }
+        Log.i("AddDialog.java", calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
         homeFragment.loadMedicines();
         dismiss();
         return true;
     }
 
-    public void setAlarm(Calendar mCurrentTime, String medicineName) {
-       /* AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
-
-        Intent notificationIntent = new Intent(getContext(), AlarmReceiver.class);
-        notificationIntent.putExtra("medicineName", medicineName);
-        PendingIntent broadcast = PendingIntent.getBroadcast(getContext(), 100, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, mCurrentTime.getTimeInMillis(), broadcast);
-        Toast.makeText(getContext(), mCurrentTime.get(Calendar.HOUR_OF_DAY) + ":" + mCurrentTime.get(Calendar.MINUTE), Toast.LENGTH_SHORT).show();
-        Log.d(TAG, mCurrentTime.get(Calendar.HOUR_OF_DAY) + ":" + mCurrentTime.get(Calendar.MINUTE));
-
-*/
+    public void setAlarm(Calendar mAlarmTime, String medicineName) {
         Intent intent = new Intent(getActivity(), AlarmActivity.class);
         intent.putExtra("medicineName", medicineName);
 
@@ -266,12 +274,24 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
         /** Getting a reference to the System Service ALARM_SERVICE */
         AlarmManager alarmManagerNew = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
 
-//        alarmManagerNew.setRepeating(AlarmManager.RTC_WAKEUP, mCurrentTime.getTimeInMillis(),
+//        alarmManagerNew.setRepeating(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(),
 //                AlarmManager.INTERVAL_DAY * 7, operation);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmManagerNew.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mCurrentTime.getTimeInMillis(), operation);
+            alarmManagerNew.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), operation);
         } else
-            alarmManagerNew.setExact(AlarmManager.RTC_WAKEUP, mCurrentTime.getTimeInMillis(), operation);
+            alarmManagerNew.setExact(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), operation);
 
+    }
+
+    private void setNotification(Calendar mNotificationTime, String medicineName) {
+
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+
+        Intent notificationIntent = new Intent(getContext(), AlarmReceiver.class);
+        notificationIntent.putExtra("medicineName", medicineName);
+        PendingIntent broadcast = PendingIntent.getBroadcast(getContext(), 100, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, mNotificationTime.getTimeInMillis(), broadcast);
+        Toast.makeText(getContext(), mNotificationTime.get(Calendar.HOUR_OF_DAY) + ":" + mNotificationTime.get(Calendar.MINUTE), Toast.LENGTH_SHORT).show();
+        Log.d(TAG, mNotificationTime.get(Calendar.HOUR_OF_DAY) + ":" + mNotificationTime.get(Calendar.MINUTE));
     }
 }
