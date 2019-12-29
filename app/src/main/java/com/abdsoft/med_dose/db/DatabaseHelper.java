@@ -10,6 +10,10 @@ import android.util.Log;
 import com.abdsoft.med_dose.ui.dashboard.HistoryItem;
 import com.abdsoft.med_dose.ui.home.HomeItem;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -121,5 +125,53 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return historyList;
+    }
+
+    public List<String> getTimings(String medicineName) {
+        List<String> timingList = new ArrayList<>();
+        StringBuffer timingsString = new StringBuffer();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(DB_TABLE, new String[]{KEY_TIMINGS}, KEY_NAME + " = ?", new String[]{medicineName}, null, null, null);
+        while (cursor.moveToNext()) {
+            timingsString.append(cursor.getString(0));
+            Log.i("Timings", timingsString.toString());
+        }
+        JSONObject json = null;
+        try {
+            json = new JSONObject(new String(timingsString));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JSONArray items = json.optJSONArray("timingArrays");
+        for (int i = 0; i < items.length(); i++) {
+            try {
+                timingList.add(items.getString(i));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return timingList;
+    }
+
+    public int noOfDaysLeft(String medicineName, Calendar mNextAlarmDate) {
+        int mPerDay = 0, mTotalDodes = 0;
+        int day = 0, month = 0, year = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(DB_TABLE, new String[]{KEY_DAY, KEY_MONTH, KEY_YEAR, KEY_TIMES_PER_DAY, KEY_TOTAL_DOSES}, KEY_NAME + " = ?", new String[]{medicineName}, null, null, null);
+        while (cursor.moveToNext()) {
+            day = cursor.getInt(0);
+            month = cursor.getInt(1);
+            year = cursor.getInt(2);
+            mPerDay = cursor.getInt(3);
+            mTotalDodes = cursor.getInt(4);
+        }
+        int totalDays = mTotalDodes/mPerDay;
+        Calendar startDate = Calendar.getInstance();
+        startDate.set(Calendar.DAY_OF_MONTH, day);
+        startDate.set(Calendar.MONTH, month);
+        startDate.set(Calendar.YEAR, year);
+        long daysBetween = Math.round((float) (mNextAlarmDate.getTimeInMillis() - startDate.getTimeInMillis()) / (24 * 60 * 60 * 1000));
+        int daysLeft = (int) (totalDays - daysBetween);
+        return daysLeft;
     }
 }
