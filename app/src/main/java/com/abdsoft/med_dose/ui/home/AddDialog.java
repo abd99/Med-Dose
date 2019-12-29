@@ -60,7 +60,7 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
     private RecyclerView.Adapter adapter;
     private NumberPicker numberPicker;
     private int noOfTotalTimes;
-    private String altertType;
+    private String alertType;
 
     private Calendar calendar;
 
@@ -221,7 +221,7 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
         chipGroupAlertType.setOnCheckedChangeListener((chipGroup, id) -> {
             Chip chip = chipGroup.findViewById(id);
             if (chip != null)
-                altertType = chip.getText().toString();
+                alertType = chip.getText().toString();
             else
                 showAlertDialog("Alert Type");
         });
@@ -267,7 +267,7 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
         calendar.set(Calendar.MINUTE, homeActivity.timeItems.get(0).getMinute());
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
-        switch (altertType) {
+        switch (alertType) {
             case "Notification":
                 setNotification(calendar, medicineName);
                 break;
