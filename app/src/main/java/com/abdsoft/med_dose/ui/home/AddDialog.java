@@ -52,7 +52,7 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
     private EditText editTextMedicineName;
     private ChipGroup chipGroupScheduleTimes, chipGroupAlertType;
     private int[] chipArrayIds = {R.id.chip1, R.id.chip2, R.id.chip3, R.id.chip4, R.id.chip5};
-    private int[] chipAlertArrayIds = {R.id.chip_notification, R.id.chip_alarm, R.id.chip_both};
+    private int[] chipAlertArrayIds = {R.id.chip_notification, R.id.chip_alarm};
 
     private List<TimeSelectorItem> timeSelectorItems;
     private int mPerDay = 1;
