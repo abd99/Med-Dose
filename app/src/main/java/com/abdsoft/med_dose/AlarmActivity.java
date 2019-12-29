@@ -1,6 +1,9 @@
 package com.abdsoft.med_dose;
 
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.widget.Button;
@@ -44,9 +47,17 @@ public class AlarmActivity extends AppCompatActivity {
         mVibrator.vibrate(pattern, 0);
 
 
+        Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        if (alarmUri == null) {
+            alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        }
+        Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), alarmUri);
+        ringtone.play();
+
         buttonDismiss = findViewById(R.id.button_dismiss);
         buttonDismiss.setOnClickListener(v -> {
             mVibrator.cancel();
+            ringtone.stop();
             finish();
         });
     }
