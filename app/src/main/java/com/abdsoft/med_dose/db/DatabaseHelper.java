@@ -17,18 +17,18 @@ import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final String DB_NAME = "Med-Dose";
-    public static final int DB_VERSION = 1;
-    public static final String DB_TABLE = "Medicines";
-    public static final String KEY_ID = "ID";
-    public static final String KEY_NAME = "Name";
-    public static final String KEY_DAY = "Day";
-    public static final String KEY_MONTH = "Month";
-    public static final String KEY_YEAR= "Year";
-    public static final String KEY_TIMES_PER_DAY= "TimesPerDay";
-    public static final String KEY_TOTAL_DOSES= "TotalDoses";
-    public static final String KEY_TIMINGS= "Timings";
-    public static final String KEY_ALERT_TYPE = "AlertType";
+    private static final String DB_NAME = "Med-Dose";
+    private static final int DB_VERSION = 1;
+    private static final String DB_TABLE = "Medicines";
+    private static final String KEY_ID = "ID";
+    private static final String KEY_NAME = "Name";
+    private static final String KEY_DAY = "Day";
+    private static final String KEY_MONTH = "Month";
+    private static final String KEY_YEAR= "Year";
+    private static final String KEY_TIMES_PER_DAY= "TimesPerDay";
+    private static final String KEY_TOTAL_DOSES= "TotalDoses";
+    private static final String KEY_TIMINGS= "Timings";
+    private static final String KEY_ALERT_TYPE = "AlertType";
 
 
     public DatabaseHelper(Context context) {
@@ -87,6 +87,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             HomeItem homeItem = new HomeItem(cursor.getString(0)  , cursor.getString(1) + " times a day");
             medicineList.add(homeItem);
         }
+        cursor.close();
         db.close();
         return medicineList;
        /* JSONObject json = new JSONObject(stringreadfromsqlite);
@@ -100,6 +101,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         while (cursor.moveToNext()) {
             id = cursor.getInt(0);
         }
+        cursor.close();
         db.close();
         return id;
     }
@@ -116,6 +118,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             HistoryItem historyItem= new HistoryItem(cursor.getString(0)  , date, cursor.getInt(4), cursor.getInt(5), cursor.getString(6));
             historyList.add(historyItem);
         }
+        cursor.close();
         db.close();
         return historyList;
     }
