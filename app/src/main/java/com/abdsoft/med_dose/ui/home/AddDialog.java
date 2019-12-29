@@ -51,6 +51,7 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
     private MaterialTextView textViewDate;
     private EditText editTextMedicineName;
     private ChipGroup chipGroupScheduleTimes, chipGroupAlertType;
+    private Chip chipSelected;
     private int[] chipArrayIds = {R.id.chip1, R.id.chip2, R.id.chip3, R.id.chip4, R.id.chip5};
     private int[] chipAlertArrayIds = {R.id.chip_notification, R.id.chip_alarm};
 
@@ -106,6 +107,7 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
         recyclerView = root.findViewById(R.id.recycler_view_time);
         numberPicker = root.findViewById(R.id.number_picker_number_doses);
         chipGroupAlertType = root.findViewById(R.id.chip_group_alert_type);
+        chipSelected = root.findViewById(chipGroupAlertType.getCheckedChipId());
 
         return root;
     }
@@ -219,9 +221,9 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
         });
 
         chipGroupAlertType.setOnCheckedChangeListener((chipGroup, id) -> {
-            Chip chip = chipGroup.findViewById(id);
-            if (chip != null)
-                alertType = chip.getText().toString();
+            chipSelected = chipGroup.findViewById(id);
+            if (chipSelected != null)
+                alertType = chipSelected.getText().toString();
             else
                 showAlertDialog("Alert Type");
         });
@@ -244,7 +246,8 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         int noOfTimesPerDay = mPerDay;
-        int noOfDoses = noOfTotalTimes;
+        int noOfDoses = noOfTotalTimes = numberPicker.getValue();
+        String reminderAlterType = alertType = chipSelected.getText().toString();
 
 
         ArrayList<String> takeTime = new ArrayList<>();
@@ -261,7 +264,7 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
         String timingList = json.toString();
         Log.d(TAG, "arrayList:" + timingList);
         DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
-        databaseHelper.insertNewMedicine(medicineName, day, month, year, noOfTimesPerDay, noOfDoses, timingList);
+        databaseHelper.insertNewMedicine(medicineName, day, month, year, noOfTimesPerDay, noOfDoses, timingList, reminderAlterType);
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, homeActivity.timeItems.get(0).getHour());
         calendar.set(Calendar.MINUTE, homeActivity.timeItems.get(0).getMinute());

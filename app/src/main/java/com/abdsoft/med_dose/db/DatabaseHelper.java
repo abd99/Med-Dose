@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.abdsoft.med_dose.ui.dashboard.HistoryItem;
 import com.abdsoft.med_dose.ui.home.HomeItem;
@@ -27,6 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_TIMES_PER_DAY= "TimesPerDay";
     public static final String KEY_TOTAL_DOSES= "TotalDoses";
     public static final String KEY_TIMINGS= "Timings";
+    public static final String KEY_ALERT_TYPE = "AlertType";
 
 
     public DatabaseHelper(Context context) {
@@ -43,7 +45,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "%s INTEGER NOT NULL, " +
                 "%s INTEGER NOT NULL, " +
                 "%s INTEGER NOT NULL, " +
-                "%s TEXT NOT NULL);", DB_TABLE, KEY_ID, KEY_NAME, KEY_DAY, KEY_MONTH, KEY_YEAR, KEY_TIMES_PER_DAY, KEY_TOTAL_DOSES, KEY_TIMINGS);
+                "%s TEXT NOT NULL, " +
+                "%s TEXT NOT NULL);", DB_TABLE, KEY_ID, KEY_NAME, KEY_DAY, KEY_MONTH, KEY_YEAR, KEY_TIMES_PER_DAY, KEY_TOTAL_DOSES, KEY_TIMINGS, KEY_ALERT_TYPE);
         sqLiteDatabase.execSQL(query);
     }
 
@@ -54,7 +57,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public void insertNewMedicine(String medicineName, int day, int month, int year, int noOfTimesPerDay, int totalDoses, String timings) {
+    public void insertNewMedicine(String medicineName, int day, int month, int year, int noOfTimesPerDay, int totalDoses, String timings, String alertType) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, medicineName);
@@ -64,7 +67,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_TIMES_PER_DAY, noOfTimesPerDay);
         values.put(KEY_TOTAL_DOSES, totalDoses);
         values.put(KEY_TIMINGS, timings);
+        values.put(KEY_ALERT_TYPE, alertType);
         db.insertWithOnConflict(DB_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        Log.i("Med-Dose DB Helper",  medicineName + day + month + year + noOfTimesPerDay + totalDoses + timings + alertType);
         db.close();
     }
 
