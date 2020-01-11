@@ -86,55 +86,65 @@
                     android:textSize="12sp" />
 
 
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/chip_group_times"
-                    android:layout_width="wrap_content"
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
                     android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:checked="true"
-                    app:singleSelection="true"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:ellipsize="end" >
+                    android:paddingBottom="8dp">
 
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip1"
-                        android:text="@string/once_a_day"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chip_group_times"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip2"
-                        android:text="@string/twice_a_day"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        app:singleSelection="true"
+                        app:selectionRequired="true"
+                        app:checkedChip="@+id/chip1"
+                        app:singleLine="true"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:ellipsize="end" >
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip3"
-                        android:text="@string/thrice_a_day"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip4"
-                        android:text="@string/_4_times_a_day"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip1"
+                            android:text="@string/once_a_day"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip5"
-                        android:text="@string/_5_times_per_day"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip2"
+                            android:text="@string/twice_a_day"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
 
-                </com.google.android.material.chip.ChipGroup>
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip3"
+                            android:text="@string/thrice_a_day"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip4"
+                            android:text="@string/_4_times_a_day"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip5"
+                            android:text="@string/_5_times_per_day"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                </HorizontalScrollView>
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
@@ -181,6 +191,56 @@
                     android:layout_marginStart="16dp"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/alert_type"
+                    android:textColor="@color/color_primary"
+                    android:textSize="12sp" />
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chip_group_alert_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        app:singleSelection="true"
+                        app:selectionRequired="true"
+                        app:checkedChip="@+id/chip_alarm"
+                        app:singleLine="true"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:ellipsize="end" >
+
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_notification"
+                            android:text="@string/notification"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_alarm"
+                            android:text="@string/alarm"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                </HorizontalScrollView>
 
             </LinearLayout>
 

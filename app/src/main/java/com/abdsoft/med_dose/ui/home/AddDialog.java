@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -49,15 +50,18 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
     private MaterialToolbar toolbar;
     private MaterialTextView textViewDate;
     private EditText editTextMedicineName;
-    private ChipGroup chipGroupScheduleTimes;
+    private ChipGroup chipGroupScheduleTimes, chipGroupAlertType;
+    private Chip chipSelected;
     private int[] chipArrayIds = {R.id.chip1, R.id.chip2, R.id.chip3, R.id.chip4, R.id.chip5};
+    private int[] chipAlertArrayIds = {R.id.chip_notification, R.id.chip_alarm};
 
     private List<TimeSelectorItem> timeSelectorItems;
-    private int mPerDay = 0;
+    private int mPerDay = 1;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private NumberPicker numberPicker;
     private int noOfTotalTimes;
+    private String alertType;
 
     private Calendar calendar;
 
@@ -102,6 +106,8 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
         chipGroupScheduleTimes = root.findViewById(R.id.chip_group_times);
         recyclerView = root.findViewById(R.id.recycler_view_time);
         numberPicker = root.findViewById(R.id.number_picker_number_doses);
+        chipGroupAlertType = root.findViewById(R.id.chip_group_alert_type);
+        chipSelected = root.findViewById(chipGroupAlertType.getCheckedChipId());
 
         return root;
     }
@@ -165,6 +171,19 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
 
         timeSelectorItems = new ArrayList<>();
 
+        HomeActivity.timeItems.clear();
+        if (mPerDay > 0) {
+            numberPicker.setMinValue(mPerDay);
+        } else {
+            numberPicker.setMinValue(0);
+        }
+        timeSelectorItems.clear();
+        for (int i = 0; i < mPerDay; i++) {
+            TimeSelectorItem timeSelectorItem = new TimeSelectorItem("Pick a Time");
+            timeSelectorItems.add(timeSelectorItem);
+        }
+        adapter = new TimeAdapter(timeSelectorItems, getActivity());
+        recyclerView.setAdapter(adapter);
         chipGroupScheduleTimes.setOnCheckedChangeListener((chipGroup, id) -> {
             Chip chip = chipGroup.findViewById(id);
             if (chip != null){
@@ -173,7 +192,7 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
                         mPerDay = iTmp + 1;
 //                        Toast.makeText(getContext(), String.valueOf(mPerDay), Toast.LENGTH_LONG).show();
                         HomeActivity.timeItems.clear();
-                        if (mPerDay >= 0) {
+                        if (mPerDay > 0) {
                             numberPicker.setMinValue(mPerDay);
                         } else {
                             numberPicker.setMinValue(0);
@@ -200,23 +219,36 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
                 Log.d("picker value", String.valueOf(noOfTotalTimes));
             }
         });
+
+        chipGroupAlertType.setOnCheckedChangeListener((chipGroup, id) -> {
+            chipSelected = chipGroup.findViewById(id);
+            if (chipSelected != null)
+                alertType = chipSelected.getText().toString();
+            else
+                showAlertDialog("Alert Type");
+        });
     }
 
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
+        HomeActivity homeActivity = (HomeActivity) getActivity();
         String medicineName = editTextMedicineName.getText().toString();
         if (medicineName.isEmpty()) {
             editTextMedicineName.setError("Enter a name");
+            return false;
+        }
+        if (homeActivity.timeItems.size() != mPerDay) {
+            showAlertDialog("Time");
             return false;
         }
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         int noOfTimesPerDay = mPerDay;
-        int noOfDoses = noOfTotalTimes;
+        int noOfDoses = noOfTotalTimes = numberPicker.getValue();
+        String reminderAlterType = alertType = chipSelected.getText().toString();
 
-        HomeActivity homeActivity = (HomeActivity) getActivity();
 
         ArrayList<String> takeTime = new ArrayList<>();
         for (int i = 0; i < homeActivity.timeItems.size(); i++) {
@@ -232,32 +264,32 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
         String timingList = json.toString();
         Log.d(TAG, "arrayList:" + timingList);
         DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
-        databaseHelper.insertNewMedicine(medicineName, day, month, year, noOfTimesPerDay, noOfDoses, timingList);
+        databaseHelper.insertNewMedicine(medicineName, day, month, year, noOfTimesPerDay, noOfDoses, timingList, reminderAlterType);
         Calendar calendar = Calendar.getInstance();
-        for (int iTmp = 0; iTmp < homeActivity.timeItems.size(); iTmp++) {
-            calendar.set(Calendar.HOUR_OF_DAY, homeActivity.timeItems.get(iTmp).getHour());
-            calendar.set(Calendar.MINUTE, homeActivity.timeItems.get(iTmp).getMinute());
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-            setAlarm(calendar, medicineName);
-            Log.i("AddDialog.java", String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)) + ":" +String.valueOf(calendar.get(Calendar.MINUTE)));
+        calendar.set(Calendar.HOUR_OF_DAY, homeActivity.timeItems.get(0).getHour());
+        calendar.set(Calendar.MINUTE, homeActivity.timeItems.get(0).getMinute());
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        switch (alertType) {
+            case "Notification":
+                setNotification(calendar, medicineName);
+                break;
+            case "Alarm":
+                setAlarm(calendar, medicineName);
+                break;
+            default:
+                setAlarm(calendar, medicineName);
+                setNotification(calendar, medicineName);
+                break;
+
         }
+        Log.i("AddDialog.java", calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
         homeFragment.loadMedicines();
         dismiss();
         return true;
     }
 
-    public void setAlarm(Calendar mCurrentTime, String medicineName) {
-       /* AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
-
-        Intent notificationIntent = new Intent(getContext(), AlarmReceiver.class);
-        notificationIntent.putExtra("medicineName", medicineName);
-        PendingIntent broadcast = PendingIntent.getBroadcast(getContext(), 100, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, mCurrentTime.getTimeInMillis(), broadcast);
-        Toast.makeText(getContext(), mCurrentTime.get(Calendar.HOUR_OF_DAY) + ":" + mCurrentTime.get(Calendar.MINUTE), Toast.LENGTH_SHORT).show();
-        Log.d(TAG, mCurrentTime.get(Calendar.HOUR_OF_DAY) + ":" + mCurrentTime.get(Calendar.MINUTE));
-
-*/
+    public void setAlarm(Calendar mAlarmTime, String medicineName) {
         Intent intent = new Intent(getActivity(), AlarmActivity.class);
         intent.putExtra("medicineName", medicineName);
 
@@ -266,12 +298,37 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
         /** Getting a reference to the System Service ALARM_SERVICE */
         AlarmManager alarmManagerNew = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
 
-//        alarmManagerNew.setRepeating(AlarmManager.RTC_WAKEUP, mCurrentTime.getTimeInMillis(),
+//        alarmManagerNew.setRepeating(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(),
 //                AlarmManager.INTERVAL_DAY * 7, operation);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmManagerNew.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mCurrentTime.getTimeInMillis(), operation);
+            alarmManagerNew.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), operation);
         } else
-            alarmManagerNew.setExact(AlarmManager.RTC_WAKEUP, mCurrentTime.getTimeInMillis(), operation);
+            alarmManagerNew.setExact(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), operation);
 
+    }
+
+    private void setNotification(Calendar mNotificationTime, String medicineName) {
+
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+
+        Intent notificationIntent = new Intent(getContext(), AlarmReceiver.class);
+        notificationIntent.putExtra("medicineName", medicineName);
+        PendingIntent broadcast = PendingIntent.getBroadcast(getContext(), 100, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, mNotificationTime.getTimeInMillis(), broadcast);
+        Toast.makeText(getContext(), mNotificationTime.get(Calendar.HOUR_OF_DAY) + ":" + mNotificationTime.get(Calendar.MINUTE), Toast.LENGTH_SHORT).show();
+        Log.d(TAG, mNotificationTime.get(Calendar.HOUR_OF_DAY) + ":" + mNotificationTime.get(Calendar.MINUTE));
+    }
+
+    public void showAlertDialog(String nonSelectedItem) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setMessage("Please select all the fields or enter all the values to move forward.\n\nNon-selected item(s) found: \n" + nonSelectedItem)
+                .setTitle("Select all fields to continue");
+
+        builder.setNeutralButton("OK", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
     }
 }
