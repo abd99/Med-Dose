@@ -13,6 +13,6 @@ A Medicine Dosage Reminder App built using native Android in Java.
 
 <img src="screenshots/7.jpg" width="250"><img src="screenshots/8.png" width="250">
 
-<img src="screenshots/9.png" width="250"><img src="screenshots/10.jpg" width="250">
+<img src="screenshots/9.png" width="250"><img src="screenshots/10.png" width="250">
 
-<img src="screenshots/11.png" width="250"><img src="screenshots/12.jpg" width="250">
+<img src="screenshots/11.png" width="250"><img src="screenshots/12.png" width="250">
